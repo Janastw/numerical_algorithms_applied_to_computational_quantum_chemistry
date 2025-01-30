@@ -1,1 +1,1 @@
-# numerical_algorithms_applied_to_computational_quantum_chemistry
+# Numerical Algorithms Applied to Computational Quantum Chemistry
