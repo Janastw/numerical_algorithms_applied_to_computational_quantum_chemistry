@@ -5,11 +5,13 @@
 #include <vector>
 
 
-
+// TODO Raise an error if the atomic number is not 79 (Gold/Au) - use std::exception
+// Echo the input
 class Atom
 {
     private:
         int atomic_number;
+        std::string bond_units = "angstroms";
         // TODO Use eigen or armadillo for coordinates, but we will worry about that later
         int x;
         int y;
@@ -36,7 +38,7 @@ class Atom
 };
 
 // TODO Getter and Setter Functions
-class Simulation
+class Cluster
 {
     private:
         std::vector<Atom> atoms;
@@ -60,13 +62,9 @@ class Simulation
 
             for (auto& atom : atoms)
             {
-                std::cout << atom.get_atomic_number() << std::endl;
+                std::cout << atom.get_atomic_number() << "(" << ")" << std::endl;
             }
         }
-
-
-
-
 };
 
 // Load atoms in a system
@@ -75,7 +73,7 @@ class Simulation
 
 // TODO Change to allow file to be read through command line
     // TODO Allow for an entire folder to be run too
-Simulation load_atoms(std::string file)
+Cluster load_atoms(std::string file)
 {
     std::ifstream inputFile(file);
     std::string line;
@@ -83,13 +81,18 @@ Simulation load_atoms(std::string file)
 
     // First line is the number of atoms
     int num_atoms = std::stoi(line);
-    std::cout << num_atoms << std::endl;
 
-    class Simulation sim;
+    // Echoing input to output
+    std::cout << line << std::endl;;
+
+    Cluster cluster_1;
 
     // Input files have atomic number, x, y, then z coordinate in each line
     while (getline(inputFile, line))
     {
+        // Echoing input to output
+        std::cout << line << std::endl;
+
         int atomic_number;
         int x;
         int y;
@@ -101,18 +104,48 @@ Simulation load_atoms(std::string file)
         numbers >> y;
         numbers >> z;
 
-        sim.add_atom(atomic_number, x, y, z);
+        cluster_1.add_atom(atomic_number, x, y, z);
         
     }
 
-    return sim;
+    return cluster_1;
 }
 
+int calculate_distance(int coord_1, int coord_2)
+{
+    return 0;
+}
+
+int calculate_distance(Atom atom_1, Atom atom_2)
+{
+    return 0;
+}
+
+int calculate_energy(Cluster clusters)
+{
+    
+    for (auto& atom : clusters.get_atoms())
+    {
+        // calculate_distance(atom);
+    }
+    
+    return 0;
+}
 
 int main(void)
 {
-    Simulation gold = load_atoms("./sample_input/Energy/1.txt");
-    gold.print_atoms();
+    Cluster gold = load_atoms("./sample_input/Energy/1.txt");
+    // gold.print_atoms();
+
+    // 1. Calculate Energy
+    int energy_of_the_cluster = 0; // calculate_energy();
+    std::cout << "E_LJ = " << energy_of_the_cluster << std::endl;
+
+    // 2. Calculate Force
+    int force_of_the_cluster = 0;
+    std::cout << "" << std::endl;
+
+
     std::cout << "Done" << std::endl;
-    return 0;
+    return energy_of_the_cluster;
 }
