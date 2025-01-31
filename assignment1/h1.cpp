@@ -15,7 +15,8 @@ class Atom
     private:
         int atomic_number;
         std::string bond_units = "angstroms";
-        double sigma;
+        double sigma; // angstroms
+        double epsilon; // kcal mol^-1
     
     public:
         // TODO Use eigen or armadillo for coordinates, but we will worry about that later
@@ -30,15 +31,17 @@ class Atom
                 {
                     throw std::exception();
                 }
-                sigma = 0.26290;
+                sigma = 2.951;
+                epsilon = 5.29;
             }
         
-        int get_atomic_number() const { atomic_number; }
+        int get_atomic_number() const { return atomic_number; }
 
         // TODO Change to armadillo vector
         void get_coords() const {}
 
-        double get_sigma() const { sigma; }
+        double get_sigma() const { return sigma; }
+        double get_epsilon() const { return epsilon; }
 
         void set_atomic_number(int new_atomic_number)
         {
@@ -79,11 +82,9 @@ class Cluster
 
         void print_atoms()
         {
-            std::cout << num_atoms << std::endl;
-
             for (auto& atom : atoms)
             {
-                std::cout << atom.get_atomic_number() << "(" << ")" << std::endl;
+                std::cout << atom.get_atomic_number() << "(" << atom.x << ", " << atom.y << ", " << atom.z << ")" << std::endl;
             }
         }
 };
@@ -109,16 +110,11 @@ Cluster load_atoms(std::string file)
     // First line is the number of atoms
     int num_atoms = std::stoi(line);
 
-    // Echoing input to output
-    std::cout << line << std::endl;;
-
     Cluster cluster_1;
 
     // Input files have atomic number, x, y, then z coordinate in each line
     while (getline(inputFile, line))
     {
-        // Echoing input to output
-        std::cout << line << std::endl;
 
         int atomic_number;
         double x;
@@ -138,7 +134,20 @@ Cluster load_atoms(std::string file)
     return cluster_1;
 }
 
+// Utilizing mixing rules
+double calculate_sigma_ij(double sigma_i, double sigma_j)
+{
+    return std::sqrt(sigma_i * sigma_j);
+}
+
+// Binding Energy between i and j
+double calculate_epsilon_ij(double binding_energy_i, double binding_energy_j)
+{
+    return std::sqrt(binding_energy_i * binding_energy_j);
+}
+
 // TODO: Can I do const correctness for these functions?
+// TODO: Alter this or remove
 double calculate_distance(int coord_1, int coord_2)
 {
     return 1;
@@ -151,7 +160,6 @@ double calculate_distance(Atom atom_1, Atom atom_2)
     double z = atom_1.z - atom_2.z;
 
     double dist = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
-    std::cout << "printing distance: " << dist << std::endl;
     return dist;
 }
 
@@ -165,29 +173,33 @@ double calculate_energy(Cluster clusters)
     {
         for (int j = i + 1; j < num_atoms; j++)
         {
-            double sigma_ij = 0.2629;
+            // TODO: Change sigma_ij to be a value retrieved by an atom instance
+            double sigma_ij = calculate_sigma_ij(clusters.get_atoms()[i].get_sigma(), clusters.get_atoms()[j].get_sigma());
             double radius_ij = calculate_distance(clusters.get_atoms()[i], clusters.get_atoms()[j]);
-            total_energy += std::pow((sigma_ij/radius_ij), 6) - 2 * std::pow((sigma_ij/radius_ij), 12);
-            std::cout << total_energy << std::endl;
+            double epsilon_ij = calculate_epsilon_ij(clusters.get_atoms()[i].get_epsilon(), clusters.get_atoms()[j].get_epsilon());
+            total_energy += epsilon_ij * (std::pow((sigma_ij/radius_ij), 12) - 2 * std::pow((sigma_ij/radius_ij),6));
         }
     }
     
+    // TODO: Possibly alter the loops to access the atoms with auto instead
     // for (auto& atom : clusters.get_atoms())
     // {
     //     calculate_distance(atom);
     // }
-    
+
+    // TODO: Address chatterbox if necessary
+    std::cout << "E_LJ = " << total_energy << std::endl;
+
     return total_energy;
 }
 
 int main(void)
 {
     Cluster gold = load_atoms("./sample_input/Energy/1.txt");
-    // gold.print_atoms();
+    gold.print_atoms();
 
     // 1. Calculate Energy
     double energy_of_the_cluster = calculate_energy(gold); // calculate_energy();
-    std::cout << "E_LJ = " << energy_of_the_cluster << std::endl;
 
     // 2. Calculate Force
     int force_of_the_cluster = 0;
