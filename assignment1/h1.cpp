@@ -211,7 +211,10 @@ class Force_calc : public Calculator
         double calculate_analytical_force(Cluster clusters)
         {
             int num_atoms = clusters.get_num_atoms();
+            
             double total_force = 0;
+
+            // Energy_calc calc;
 
             for (int i = 0; i < num_atoms - 1; i++)
             {
@@ -221,10 +224,13 @@ class Force_calc : public Calculator
                     double sigma_ij = calculate_sigma_ij(clusters.get_atoms()[i].get_sigma(), clusters.get_atoms()[j].get_sigma());
                     double radius_ij = calculate_distance(clusters.get_atoms()[i], clusters.get_atoms()[j]);
                     double epsilon_ij = calculate_epsilon_ij(clusters.get_atoms()[i].get_epsilon(), clusters.get_atoms()[j].get_epsilon());
-                    double new_force = 12 * epsilon_ij / radius_ij * (std::pow((sigma_ij/radius_ij), 12) - std::pow((sigma_ij/radius_ij),6));
+                    // double energy = calc.calculate_energy(clusters);
+                    double new_force = 12 * epsilon_ij / (radius_ij) * (std::pow((sigma_ij/radius_ij), 12) - std::pow((sigma_ij/radius_ij),6));
+                    // double force = -1 * new_force / clusters.get_atoms()[i].x;
                     total_force += new_force;
-                    // std::cout << new_force << std::endl;
+                    std::cout << new_force << "  ";
                 }
+                std::cout << std::endl;
             }
             std::cout << "Analytical Force = " << total_force << std::endl;
 
@@ -233,6 +239,8 @@ class Force_calc : public Calculator
 
         double forward_difference(double step_size)
         {
+            // [f(x + h) - f(x)] / h
+
             return 1;
         }
 
@@ -272,6 +280,9 @@ int main(void)
 
     // 3. Calculate Force
     Force_calc f_calc;
+    double step_size = 0.1;
+    double forw_diff = f_calc.forward_difference(step_size);
+    double cent_diff = f_calc.central_difference(step_size);
     double analytical_force_of_the_cluster = f_calc.calculate_analytical_force((gold));
     int force_of_the_cluster = 0;
     std::cout << "" << std::endl;
