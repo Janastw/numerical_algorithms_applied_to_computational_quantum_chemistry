@@ -64,10 +64,6 @@ class Atom
             std::cout << x_af << " " << y_af << " " << z_af << std::endl;
         }
 
-        // Atom operator-(Atom atom_2)
-        // {
-        //     x - atom_2.x;
-        // }
 };
 
 // TODO Getter and Setter Functions
