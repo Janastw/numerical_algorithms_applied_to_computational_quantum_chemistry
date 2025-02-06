@@ -5,6 +5,7 @@
 #include <vector>
 #include <exception>
 #include <cmath>
+#include <armadillo>
 
 
 // TODO: Raise an error if the atomic number is not 79 (Gold/Au) - use std::exception
@@ -23,6 +24,11 @@ class Atom
         double x;
         double y;
         double z;
+
+        // af = analytical force
+        double x_af = 0.0;
+        double y_af = 0.0;
+        double z_af = 0.0;
 
         Atom(int atomic_number_, double x_, double y_, double z_) :
             atomic_number(atomic_number_), x(x_), y(y_), z(z_)
@@ -53,10 +59,15 @@ class Atom
 
         }
 
-        Atom operator-(Atom atom_2)
+        void const print_af() const
         {
-            x - atom_2.x;
+            std::cout << x_af << " " << y_af << " " << z_af << std::endl;
         }
+
+        // Atom operator-(Atom atom_2)
+        // {
+        //     x - atom_2.x;
+        // }
 };
 
 // TODO Getter and Setter Functions
@@ -64,7 +75,7 @@ class Cluster
 {
     private:
         std::vector<Atom> atoms;
-        int num_atoms = 0;
+        // Maybe use a vector for forces or maybe a matrix
 
     public:
         // TODO Change to allow file to be read through command line
@@ -110,18 +121,47 @@ class Cluster
         {
             Atom new_atom(atomic_number, x, y, z);
             atoms.push_back(new_atom);
-            num_atoms++;   
         }
 
-        int get_num_atoms() const { return num_atoms; }
+        int get_num_atoms() const { return atoms.size(); }
 
         std::vector<Atom> get_atoms() const { return atoms; }
+        std::vector<Atom>& get_atoms() { return atoms; }
 
         void print_atoms()
         {
             for (auto& atom : atoms)
             {
                 std::cout << atom.get_atomic_number() << "(" << atom.x << ", " << atom.y << ", " << atom.z << ")" << std::endl;
+            }
+        }
+
+        void print_analytical_force()
+        {
+            if (atoms.empty())
+            {
+                std::cout << "No atoms present in the system" << std::endl;
+                return;
+            }
+            for (int i = 0; i < atoms.size(); i ++)
+            {
+                std::cout << atoms[i].x_af << " ";
+            }
+             std::cout << std::endl;
+            for (int i = 0; i < atoms.size(); i ++)
+            {
+                std::cout << atoms[i].y_af << " ";
+            }
+             std::cout << std::endl;
+            for (int i = 0; i < atoms.size(); i ++)
+            {
+                std::cout << atoms[i].z_af << " ";
+            }
+            std::cout << std::endl;
+            for (const auto& atom : atoms)
+            {
+                // std::cout << atom.x << " " << atom.y << " " << atom.z << std::endl;
+                // std::cout << atom.x_af << " " << atom.y_af << " " << atom.z_af << std::endl;
             }
         }
 };
@@ -208,31 +248,28 @@ class Force_calc : public Calculator
 {
     public: 
         // TODO: Worry about this later but this isn't working
-        double calculate_analytical_force(Cluster clusters)
+        double calculate_analytical_force(Cluster& clusters)
         {
             int num_atoms = clusters.get_num_atoms();
             
             double total_force = 0;
-
-            // Energy_calc calc;
+            std::vector<Atom>& atoms = clusters.get_atoms();
 
             for (int i = 0; i < num_atoms - 1; i++)
             {
                 for (int j = i + 1; j < num_atoms; j++)
                 {
                     // TODO: Change sigma_ij to be a value retrieved by an atom instance
-                    double sigma_ij = calculate_sigma_ij(clusters.get_atoms()[i].get_sigma(), clusters.get_atoms()[j].get_sigma());
-                    double radius_ij = calculate_distance(clusters.get_atoms()[i], clusters.get_atoms()[j]);
-                    double epsilon_ij = calculate_epsilon_ij(clusters.get_atoms()[i].get_epsilon(), clusters.get_atoms()[j].get_epsilon());
+                    double sigma_ij = calculate_sigma_ij(atoms[i].get_sigma(), atoms[j].get_sigma());
+                    double radius_ij = calculate_distance(atoms[i], atoms[j]);
+                    double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
                     // double energy = calc.calculate_energy(clusters);
                     double new_force = 12 * epsilon_ij / (radius_ij) * (std::pow((sigma_ij/radius_ij), 12) - std::pow((sigma_ij/radius_ij),6));
-                    // double force = -1 * new_force / clusters.get_atoms()[i].x;
-                    total_force += new_force;
-                    std::cout << new_force << "  ";
+                    atoms[i].x_af += new_force * (atoms[j].x - atoms[i].x);
+                    atoms[i].y_af += new_force * (atoms[j].y - atoms[i].y);
+                    atoms[i].z_af += new_force * (atoms[j].z - atoms[i].z);
                 }
-                std::cout << std::endl;
             }
-            std::cout << "Analytical Force = " << total_force << std::endl;
 
             return total_force;
         }
@@ -283,7 +320,10 @@ int main(void)
     double step_size = 0.1;
     double forw_diff = f_calc.forward_difference(step_size);
     double cent_diff = f_calc.central_difference(step_size);
-    double analytical_force_of_the_cluster = f_calc.calculate_analytical_force((gold));
+    double analytical_force_of_the_cluster = f_calc.calculate_analytical_force(gold);
+    gold.print_analytical_force();
+
+
     int force_of_the_cluster = 0;
     std::cout << "" << std::endl;
 
