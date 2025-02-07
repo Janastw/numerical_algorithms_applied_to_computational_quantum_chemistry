@@ -23,11 +23,14 @@ double calculate_distance(int coord_1, int coord_2)
 
 double calculate_distance(Atom atom_1, Atom atom_2)
 {
-    double x = atom_1.x - atom_2.x;
-    double y = atom_1.y - atom_2.y;
-    double z = atom_1.z - atom_2.z;
+    // double x = atom_1.x - atom_2.x;
+    // double y = atom_1.y - atom_2.y;
+    // double z = atom_1.z - atom_2.z;
 
-    double dist = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
+    arma::vec coords = atom_1.coords - atom_2.coords;
+
+    // double dist = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
+    double dist = std::sqrt(arma::dot(coords, coords));
     return dist;
 }
 
@@ -83,6 +86,7 @@ void calculate_lennard_jones_forces(Cluster& clusters)
             atoms[i].z_af += analytical_force * (atoms[k].z - atoms[i].z);
         }
     }
+    
 }
 
 // void calculate_lennard_jones_forces_forward_difference(Cluster& clusters, double step_size)

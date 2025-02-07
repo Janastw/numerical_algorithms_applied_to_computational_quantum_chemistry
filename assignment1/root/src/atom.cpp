@@ -9,6 +9,7 @@ Atom::Atom(int atomic_number_, double x_, double y_, double z_) :
         }
         sigma = 2.951;
         epsilon = 5.29;
+        coords = {x_, y_, z_};
     }
 
 int Atom::get_atomic_number() const { return atomic_number; }
