@@ -24,7 +24,9 @@ class Cluster
         std::vector<Atom>& get_atoms();
         void print_atoms();
         double calculate_total_energy();
+        void zero_forces();
         void update_analytical_force();
+        void update_forward_difference(double step_size);
         void print_analytical_force();
         void print_forward_difference();
 

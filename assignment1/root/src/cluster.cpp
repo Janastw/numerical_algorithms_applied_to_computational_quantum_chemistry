@@ -100,8 +100,17 @@ double Cluster::calculate_total_energy()
     return total_energy;
 }
 
+void Cluster::zero_forces()
+{
+    for (auto& atom: atoms)
+    {
+        atom.coords_analytical_forces = arma::vec({0.0, 0.0, 0.0});
+    }
+}
+
 void Cluster::update_analytical_force()
 {
+    zero_forces();
     int num_atoms = atoms.size();
     std::vector<Atom>& atoms = get_atoms();
 
@@ -118,8 +127,37 @@ void Cluster::update_analytical_force()
             double radius_ik = calculate_distance(atoms[i].coords, atoms[k].coords);
             double epsilon_ik = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[k].get_epsilon());
             double analytical_force = calculate_lj_force(sigma_ik, radius_ik, epsilon_ik);
-
             atoms[i].coords_analytical_forces += (atoms[i].coords - atoms[k].coords) * analytical_force;
+        }
+    }
+}
+
+void Cluster::update_forward_difference(double step_size)
+{
+    zero_forces();
+    int num_atoms = atoms.size();
+    std::vector<Atom>& atoms = get_atoms();
+
+    for (int i = 0; i < num_atoms; i++)
+    {
+        for (int j = 0; j < num_atoms; j++)
+        {
+            if (i == j)
+            {
+                continue;
+            }
+            double sigma_ij = calculate_sigma_ij(atoms[i].get_sigma(), atoms[j].get_sigma());
+            double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
+            double radius_ij = calculate_distance(atoms[i].coords, atoms[j].coords);
+
+            double f_of_x = calculate_lj_energy(sigma_ij, epsilon_ij, radius_ij);
+            double f_of_x_plus_step_size = calculate_lj_energy(sigma_ij, epsilon_ij, radius_ij + step_size);
+            double forward_diff = forward_difference(f_of_x, f_of_x_plus_step_size, step_size);
+            std::cout << "F(x): " << f_of_x << " F(x + h)" << f_of_x_plus_step_size << std::endl;
+            std::cout << "Calculation: " << forward_diff << std::endl;
+            std::cout << atoms[i].coords - atoms[j].coords << std::endl;
+
+            atoms[i].coords_analytical_forces += (atoms[i].coords - atoms[j].coords) * forward_diff;
         }
     }
 }
