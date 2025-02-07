@@ -20,6 +20,7 @@ class Atom
         // TODO Use eigen or armadillo for coordinates, but we will worry about that later
         double x, y, z;
         arma::vec coords;
+        arma::vec coords_analytical_forces = {0.0, 0.0, 0.0};
 
         // af = analytical force
         double x_af = 0.0, y_af = 0.0, z_af = 0.0;

@@ -78,19 +78,13 @@ void Cluster::print_analytical_force()
         std::cout << "No atoms present in the system" << std::endl;
         return;
     }
-    for (int i = 0; i < atoms.size(); i ++)
+    for (int i = 0; i < 3; i++)
     {
-        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].x_af << " ";
-    }
+        for (auto& atom: atoms)
+        {
+            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
+        }
         std::cout << std::endl;
-    for (int i = 0; i < atoms.size(); i ++)
-    {
-        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].y_af << " ";
-    }
-        std::cout << std::endl;
-    for (int i = 0; i < atoms.size(); i ++)
-    {
-        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].z_af << " ";
     }
 
 }

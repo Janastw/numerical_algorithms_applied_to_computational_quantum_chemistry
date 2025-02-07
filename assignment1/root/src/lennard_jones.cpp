@@ -23,13 +23,8 @@ double calculate_distance(int coord_1, int coord_2)
 
 double calculate_distance(Atom atom_1, Atom atom_2)
 {
-    // double x = atom_1.x - atom_2.x;
-    // double y = atom_1.y - atom_2.y;
-    // double z = atom_1.z - atom_2.z;
-
     arma::vec coords = atom_1.coords - atom_2.coords;
 
-    // double dist = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
     double dist = std::sqrt(arma::dot(coords, coords));
     return dist;
 }
@@ -81,9 +76,8 @@ void calculate_lennard_jones_forces(Cluster& clusters)
             double radius_ik = calculate_distance(atoms[i], atoms[k]);
             double epsilon_ik = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[k].get_epsilon());
             double analytical_force = epsilon_ik * (1 / radius_ik) * (12 * std::pow(sigma_ik, 12) / std::pow(radius_ik, 13) - 12 * std::pow(sigma_ik, 6) / std::pow(radius_ik, 7));
-            atoms[i].x_af += analytical_force * (atoms[k].x - atoms[i].x);
-            atoms[i].y_af += analytical_force * (atoms[k].y - atoms[i].y);
-            atoms[i].z_af += analytical_force * (atoms[k].z - atoms[i].z);
+            
+            atoms[i].coords_analytical_forces += (atoms[i].coords - atoms[k].coords) * analytical_force;
         }
     }
     
