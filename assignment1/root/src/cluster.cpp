@@ -71,6 +71,57 @@ void Cluster::print_atoms()
     }
 }
 
+double Cluster::calculate_total_energy()
+{
+    // Sum of pair-wise energies using sigma_ij/radius_ij
+    int num_atoms = atoms.size();
+    double total_energy = 0;
+
+    for (int i = 0; i < num_atoms - 1; i++)
+    {
+        for (int j = i + 1; j < num_atoms; j++)
+        {
+            // TODO: Change sigma_ij to be a value retrieved by an atom instance
+            double sigma_ij = calculate_sigma_ij(atoms[i].get_sigma(), atoms[j].get_sigma());
+            double radius_ij = calculate_distance(atoms[i], atoms[j]);
+            double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
+            total_energy += calculate_lj_energy(sigma_ij, radius_ij, epsilon_ij);
+        }
+    }
+    
+    // TODO: Possibly alter the loops to access the atoms with auto instead
+    // for (auto& atom : clusters.get_atoms())
+    // {
+    //     calculate_distance(atom);
+    // }
+
+    return total_energy;
+}
+
+void Cluster::update_analytical_force()
+{
+    int num_atoms = atoms.size();
+    std::vector<Atom>& atoms = get_atoms();
+
+    for (int i = 0; i < num_atoms; i++)
+    {
+        for (int k = 0; k < num_atoms; k++)
+        {
+            if (i == k)
+            {
+                continue;
+            }
+
+            double sigma_ik = calculate_sigma_ij(atoms[i].get_sigma(), atoms[k].get_sigma());
+            double radius_ik = calculate_distance(atoms[i], atoms[k]);
+            double epsilon_ik = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[k].get_epsilon());
+            double analytical_force = calculate_lj_force(sigma_ik, radius_ik, epsilon_ik);
+
+            atoms[i].coords_analytical_forces += (atoms[i].coords - atoms[k].coords) * analytical_force;
+        }
+    }
+}
+
 void Cluster::print_analytical_force()
 {
     if (atoms.empty())

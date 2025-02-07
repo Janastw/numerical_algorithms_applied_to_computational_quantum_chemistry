@@ -2,6 +2,7 @@
 #define CLUSTER_HPP
 
 #include "atom.hpp"
+#include "lennard_jones.hpp"
 #include <vector>
 #include <string>
 
@@ -22,6 +23,8 @@ class Cluster
         std::vector<Atom> get_atoms() const;
         std::vector<Atom>& get_atoms();
         void print_atoms();
+        double calculate_total_energy();
+        void update_analytical_force();
         void print_analytical_force();
         void print_forward_difference();
 
