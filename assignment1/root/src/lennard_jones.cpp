@@ -14,16 +14,9 @@ double calculate_epsilon_ij(double binding_energy_i, double binding_energy_j)
     return std::sqrt(binding_energy_i * binding_energy_j);
 }
 
-// TODO: Can I do const correctness for these functions?
-// TODO: Alter this or remove
-double calculate_distance(int coord_1, int coord_2)
+double calculate_distance(const arma::vec atom_1_coords, const arma::vec atom_2_coords)
 {
-    return 1;
-}
-
-double calculate_distance(Atom atom_1, Atom atom_2)
-{
-    arma::vec coords = atom_1.coords - atom_2.coords;
+    arma::vec coords = atom_1_coords - atom_2_coords;
 
     double dist = std::sqrt(arma::dot(coords, coords));
     return dist;

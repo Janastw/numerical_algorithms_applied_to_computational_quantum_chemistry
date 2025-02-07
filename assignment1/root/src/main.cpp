@@ -30,7 +30,6 @@ int main(void)
     gold_force_1.load_atoms("./sample_input/Force/1.txt");
     double energy_force_1 = gold_force_1.calculate_total_energy();
     std::cout << "E_LJ = " << energy_force_1 << std::endl;
-    // calculate_lennard_jones_forces(gold_force_1);
     gold_force_1.update_analytical_force();
     gold_force_1.print_analytical_force();
     // std::cout << "Stepsize for finite difference:" << std::endl;

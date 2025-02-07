@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <armadillo>
+
 
 
 // Cluster::Cluster(const Cluster& cluster_, double step_size) :
@@ -83,7 +85,7 @@ double Cluster::calculate_total_energy()
         {
             // TODO: Change sigma_ij to be a value retrieved by an atom instance
             double sigma_ij = calculate_sigma_ij(atoms[i].get_sigma(), atoms[j].get_sigma());
-            double radius_ij = calculate_distance(atoms[i], atoms[j]);
+            double radius_ij = calculate_distance(atoms[i].coords, atoms[j].coords);
             double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
             total_energy += calculate_lj_energy(sigma_ij, radius_ij, epsilon_ij);
         }
@@ -113,7 +115,7 @@ void Cluster::update_analytical_force()
             }
 
             double sigma_ik = calculate_sigma_ij(atoms[i].get_sigma(), atoms[k].get_sigma());
-            double radius_ik = calculate_distance(atoms[i], atoms[k]);
+            double radius_ik = calculate_distance(atoms[i].coords, atoms[k].coords);
             double epsilon_ik = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[k].get_epsilon());
             double analytical_force = calculate_lj_force(sigma_ik, radius_ik, epsilon_ik);
 
