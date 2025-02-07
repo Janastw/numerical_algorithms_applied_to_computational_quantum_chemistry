@@ -1,0 +1,3 @@
+/Users/thomasjanas/Documents/programming headquarters/berkeley/CHEM_279/Assignments/numerical_algorithms_applied_to_computational_quantum_chemistry/assignment1/build/CMakeFiles/h1.dir
+/Users/thomasjanas/Documents/programming headquarters/berkeley/CHEM_279/Assignments/numerical_algorithms_applied_to_computational_quantum_chemistry/assignment1/build/CMakeFiles/edit_cache.dir
+/Users/thomasjanas/Documents/programming headquarters/berkeley/CHEM_279/Assignments/numerical_algorithms_applied_to_computational_quantum_chemistry/assignment1/build/CMakeFiles/rebuild_cache.dir
