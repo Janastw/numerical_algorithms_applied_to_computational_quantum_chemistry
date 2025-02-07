@@ -1,13 +1,13 @@
 #include "derivative_approximation.hpp"
 
-double forward_difference(double step_size)
+double forward_difference(double f_x, double f_x_plus_step_size, double step_size)
 {
     // [f(x + h) - f(x)] / h
-
-    return 1;
+    return (f_x_plus_step_size - f_x) / step_size;
 }
 
-double central_difference(double step_size)
+double central_difference(double f_x_plus_step_size, double f_x_minus_step_size, double step_size)
 {
-    return 1;
+    // [f(x + h) - f(x - h)] / 2h
+    return (f_x_plus_step_size - f_x_minus_step_size) / (2 * step_size);
 }

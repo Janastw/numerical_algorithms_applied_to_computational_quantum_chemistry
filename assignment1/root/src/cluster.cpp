@@ -3,6 +3,18 @@
 #include <iostream>
 #include <sstream>
 
+
+// Cluster::Cluster(Cluster new_cluster, double step_size) :
+//     atoms(new_cluster.get_atoms())
+//     {
+//         for (auto& atom : atoms)
+//         {
+//             atom.x += step_size;
+//             atom.y += step_size;
+//             atom.z += step_size;
+//         }
+//     };
+
 bool Cluster::load_atoms(std::string file)
 {
     std::ifstream inputFile(file);
@@ -68,22 +80,40 @@ void Cluster::print_analytical_force()
     }
     for (int i = 0; i < atoms.size(); i ++)
     {
-        std::cout << atoms[i].x_af << " ";
+        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].x_af << " ";
     }
         std::cout << std::endl;
     for (int i = 0; i < atoms.size(); i ++)
     {
-        std::cout << atoms[i].y_af << " ";
+        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].y_af << " ";
     }
         std::cout << std::endl;
     for (int i = 0; i < atoms.size(); i ++)
     {
-        std::cout << atoms[i].z_af << " ";
+        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].z_af << " ";
     }
-    std::cout << std::endl;
-    for (const auto& atom : atoms)
+
+}
+
+void Cluster::print_forward_difference()
+{
+    if (atoms.empty())
     {
-        // std::cout << atom.x << " " << atom.y << " " << atom.z << std::endl;
-        // std::cout << atom.x_af << " " << atom.y_af << " " << atom.z_af << std::endl;
+        std::cout << "No atoms present in the system" << std::endl;
+        return;
+    }
+    for (int i = 0; i < atoms.size(); i ++)
+    {
+        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].x_af << " ";
+    }
+        std::cout << std::endl;
+    for (int i = 0; i < atoms.size(); i ++)
+    {
+        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].y_af << " ";
+    }
+        std::cout << std::endl;
+    for (int i = 0; i < atoms.size(); i ++)
+    {
+        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].z_af << " ";
     }
 }

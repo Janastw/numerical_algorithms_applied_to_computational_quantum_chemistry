@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <armadillo>
 
 
 // TODO: Raise an error if the atomic number is not 79 (Gold/Au) - use std::exception

@@ -19,6 +19,8 @@ double calculate_lennard_jones_energy(Cluster clusters);
 
 void calculate_lennard_jones_forces(Cluster& clusters);
 
+// void calculate_lennard_jones_forces_forward_difference(Cluster& clusters, double step_size);
+
 #endif
 
 
