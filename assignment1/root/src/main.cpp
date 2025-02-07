@@ -31,6 +31,9 @@ int main(void)
     calculate_lennard_jones_forces(gold_force_1);
     std::cout << "E_LJ = " << energy_force_1 << std::endl;
     gold_force_1.print_analytical_force();
+    std::cout << "Stepsize for finite difference:" << std::endl;
+    std::cout << "F_LJ_forward_difference" << std::endl;
+    // std::cout << calculate_lennard_jones_forces_forward_difference(gold_force_1, 0.1) << std::endl;
 
     std::cout << "\n" <<"Done" << std::endl;
     return 0;

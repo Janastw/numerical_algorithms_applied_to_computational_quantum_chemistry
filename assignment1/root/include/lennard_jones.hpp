@@ -2,6 +2,7 @@
 #define LENNARD_JONES_HPP
 #include "atom.hpp"
 #include "cluster.hpp"
+#include "derivative_approximation.hpp"
 
 
 double calculate_sigma_ij(double sigma_i, double sigma_j);
@@ -15,11 +16,11 @@ double calculate_distance(int coord_1, int coord_2);
 
 double calculate_distance(Atom atom_1, Atom atom_2);
 
-double calculate_lennard_jones_energy(Cluster clusters);
+double calculate_lennard_jones_energy(Cluster clusters, double step_size=0);
 
 void calculate_lennard_jones_forces(Cluster& clusters);
 
-// void calculate_lennard_jones_forces_forward_difference(Cluster& clusters, double step_size);
+void calculate_lennard_jones_forces_forward_difference(Cluster& cluster, double step_size);
 
 #endif
 

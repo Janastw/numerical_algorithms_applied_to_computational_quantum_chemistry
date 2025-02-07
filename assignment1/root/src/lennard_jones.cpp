@@ -29,7 +29,7 @@ double calculate_distance(Atom atom_1, Atom atom_2)
     return dist;
 }
 
-double calculate_lennard_jones_energy(Cluster clusters)
+double calculate_lennard_jones_energy(Cluster clusters, double step_size)
 {
     // Sum of pair-wise energies using sigma_ij/radius_ij
     int num_atoms = clusters.get_num_atoms();
@@ -41,7 +41,7 @@ double calculate_lennard_jones_energy(Cluster clusters)
         {
             // TODO: Change sigma_ij to be a value retrieved by an atom instance
             double sigma_ij = calculate_sigma_ij(clusters.get_atoms()[i].get_sigma(), clusters.get_atoms()[j].get_sigma());
-            double radius_ij = calculate_distance(clusters.get_atoms()[i], clusters.get_atoms()[j]);
+            double radius_ij = calculate_distance(clusters.get_atoms()[i], clusters.get_atoms()[j]) + step_size;
             double epsilon_ij = calculate_epsilon_ij(clusters.get_atoms()[i].get_epsilon(), clusters.get_atoms()[j].get_epsilon());
             total_energy += epsilon_ij * (std::pow((sigma_ij/radius_ij), 12) - 2 * std::pow((sigma_ij/radius_ij),6));
         }
@@ -81,6 +81,12 @@ void calculate_lennard_jones_forces(Cluster& clusters)
         }
     }
     
+}
+
+void calculate_lennard_jones_forces_forward_difference(Cluster& cluster, double step_size)
+{
+    double forward_diff = forward_difference(calculate_lennard_jones_energy(cluster, step_size), calculate_lennard_jones_energy(cluster, step_size), step_size);
+    std::cout << forward_diff << std::endl;
 }
 
 // void calculate_lennard_jones_forces_forward_difference(Cluster& clusters, double step_size)

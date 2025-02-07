@@ -4,8 +4,8 @@
 #include <sstream>
 
 
-// Cluster::Cluster(Cluster new_cluster, double step_size) :
-//     atoms(new_cluster.get_atoms())
+// Cluster::Cluster(const Cluster& cluster_, double step_size) :
+//     atoms(cluster_.get_atoms())
 //     {
 //         for (auto& atom : atoms)
 //         {
@@ -13,7 +13,7 @@
 //             atom.y += step_size;
 //             atom.z += step_size;
 //         }
-//     };
+//     }
 
 bool Cluster::load_atoms(std::string file)
 {
@@ -96,18 +96,17 @@ void Cluster::print_forward_difference()
         std::cout << "No atoms present in the system" << std::endl;
         return;
     }
-    for (int i = 0; i < atoms.size(); i ++)
+    if (atoms.empty())
     {
-        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].x_af << " ";
+        std::cout << "No atoms present in the system" << std::endl;
+        return;
     }
-        std::cout << std::endl;
-    for (int i = 0; i < atoms.size(); i ++)
+    for (int i = 0; i < 3; i++)
     {
-        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].y_af << " ";
-    }
+        for (auto& atom: atoms)
+        {
+            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
+        }
         std::cout << std::endl;
-    for (int i = 0; i < atoms.size(); i ++)
-    {
-        std::cout << std::setw(8) << std::setprecision(4) << atoms[i].z_af << " ";
     }
 }
