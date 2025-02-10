@@ -26,9 +26,12 @@ class Cluster
         double calculate_total_energy();
         void zero_forces();
         void update_analytical_force();
+        void step_size(double step_size);
         void update_forward_difference(double step_size);
+        void update_central_difference(double step_size);
         void print_analytical_force();
         void print_forward_difference();
+        void print_steepest_descent();
 
 };
 

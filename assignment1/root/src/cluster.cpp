@@ -110,7 +110,6 @@ void Cluster::zero_forces()
 
 void Cluster::update_analytical_force()
 {
-    zero_forces();
     int num_atoms = atoms.size();
     std::vector<Atom>& atoms = get_atoms();
 
@@ -132,9 +131,33 @@ void Cluster::update_analytical_force()
     }
 }
 
+void Cluster::step_size(double step_size)
+{
+    for (int i = 0; i < atoms.size(); i++){
+        for (int j = 0; j < atoms.size(); j++){
+            for (int k = 0; k < 3; k++){
+                if (i == j){
+                    continue;
+                }
+                double sigma_ij = calculate_sigma_ij(atoms[i].get_sigma(), atoms[j].get_sigma());
+                double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
+                double radius_ij = calculate_distance(atoms[i].coords, atoms[j].coords);
+                double f_of_x = calculate_lj_energy(sigma_ij, epsilon_ij, radius_ij);
+                
+                atoms[i].coords[k] += step_size;
+                double radius_ij_stepped = calculate_distance(atoms[i].coords, atoms[j].coords);
+                double f_of_x_plus_step_size = calculate_lj_energy(sigma_ij, epsilon_ij, radius_ij_stepped);
+                atoms[i].coords[k] -= step_size;
+
+                double forward_diff = forward_difference(f_of_x, f_of_x_plus_step_size, step_size);
+                atoms[i].coords_analytical_forces += arma::normalise(atoms[i].coords - atoms[j].coords) * forward_diff;
+            }
+        }
+    }
+}
+
 void Cluster::update_forward_difference(double step_size)
 {
-    zero_forces();
     int num_atoms = atoms.size();
     std::vector<Atom>& atoms = get_atoms();
 
@@ -150,17 +173,46 @@ void Cluster::update_forward_difference(double step_size)
             double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
             double radius_ij = calculate_distance(atoms[i].coords, atoms[j].coords);
 
-            double f_of_x = calculate_lj_energy(sigma_ij, epsilon_ij, radius_ij);
-            double f_of_x_plus_step_size = calculate_lj_energy(sigma_ij, epsilon_ij, radius_ij + step_size);
-            double forward_diff = forward_difference(f_of_x, f_of_x_plus_step_size, step_size);
-            std::cout << "F(x): " << f_of_x << " F(x + h)" << f_of_x_plus_step_size << std::endl;
-            std::cout << "Calculation: " << forward_diff << std::endl;
-            std::cout << atoms[i].coords - atoms[j].coords << std::endl;
+            double f_of_x = calculate_lj_energy(sigma_ij, radius_ij, epsilon_ij);
+            double f_of_x_plus_step_size = calculate_lj_energy(sigma_ij, radius_ij + step_size, epsilon_ij);
 
-            atoms[i].coords_analytical_forces += (atoms[i].coords - atoms[j].coords) * forward_diff;
+            double forward_diff = forward_difference(f_of_x, f_of_x_plus_step_size, step_size);
+            atoms[i].coords_analytical_forces += arma::normalise(atoms[i].coords - atoms[j].coords) * forward_diff;
+
         }
     }
 }
+void Cluster::update_central_difference(double step_size)
+{
+    int num_atoms = atoms.size();
+    std::vector<Atom>& atoms = get_atoms();
+
+    for (int i = 0; i < num_atoms; i++)
+    {
+        for (int j = 0; j < num_atoms; j++)
+        {
+            if (i == j)
+            {
+                continue;
+            }
+            double sigma_ij = calculate_sigma_ij(atoms[i].get_sigma(), atoms[j].get_sigma());
+            double epsilon_ij = calculate_epsilon_ij(atoms[i].get_epsilon(), atoms[j].get_epsilon());
+            double radius_ij = calculate_distance(atoms[i].coords, atoms[j].coords);
+
+            double f_of_x_plus_step_size = calculate_lj_energy(sigma_ij, radius_ij + step_size, epsilon_ij);
+            double f_of_x_minus_step_size = calculate_lj_energy(sigma_ij, radius_ij - step_size, epsilon_ij);
+            double central_diff = central_difference(f_of_x_minus_step_size, f_of_x_plus_step_size, step_size);
+
+            atoms[i].coords_analytical_forces += arma::normalise(atoms[i].coords - atoms[j].coords) * central_diff;
+        }
+    }
+}
+
+void print_steepest_descent()
+{
+
+}
+
 
 void Cluster::print_analytical_force()
 {
@@ -182,11 +234,6 @@ void Cluster::print_analytical_force()
 
 void Cluster::print_forward_difference()
 {
-    if (atoms.empty())
-    {
-        std::cout << "No atoms present in the system" << std::endl;
-        return;
-    }
     if (atoms.empty())
     {
         std::cout << "No atoms present in the system" << std::endl;

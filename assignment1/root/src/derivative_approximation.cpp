@@ -3,10 +3,9 @@
 double forward_difference(double f_x, double f_x_plus_step_size, double step_size)
 {
     // [f(x + h) - f(x)] / h
-    double diff = f_x_plus_step_size - f_x;
-    double division = diff / step_size;
+    double diff = -(f_x_plus_step_size - f_x) / step_size;
 
-    return division;
+    return diff;
 }
 
 double central_difference(double f_x_plus_step_size, double f_x_minus_step_size, double step_size)
