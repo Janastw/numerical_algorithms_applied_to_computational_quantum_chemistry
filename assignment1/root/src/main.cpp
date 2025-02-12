@@ -69,9 +69,12 @@ int main(void)
     double energy_SD_with_line_search_1 = gold_SD_with_line_search_1.calculate_total_energy();
     double central_diff_step_size = 0.0001;
     double sd_step_size = 0.3;
+    double threshold_convergence = 0.01;
 
-    steepest_descent_central_diff(gold_SD_with_line_search_1, central_diff_step_size, sd_step_size, 0);
+    steepest_descent_central_diff(gold_SD_with_line_search_1, central_diff_step_size, sd_step_size, threshold_convergence, 0);
     // gold_SD_with_line_search_1.print_steepest_descent(); 
+
+    std::cout << gold_SD_with_line_search_1.system_matrix << std::endl;
 
 
     std::cout << "\n" <<"Done" << std::endl;

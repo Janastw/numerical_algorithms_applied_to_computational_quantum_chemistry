@@ -13,6 +13,7 @@ class Cluster
         // Maybe use a vector for forces or maybe a matrix
 
     public:
+        arma::mat system_matrix;
         // TODO Change to allow file to be read through command line
         // TODO Allow for an entire folder to be run too
         bool load_atoms(std::string file);

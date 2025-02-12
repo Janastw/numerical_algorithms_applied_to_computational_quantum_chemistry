@@ -32,6 +32,10 @@ bool Cluster::load_atoms(std::string file)
     // First line is the number of atoms
     int num_atoms = std::stoi(line);
 
+    arma::mat system_matrix(3, num_atoms, arma::fill::zeros);
+
+    int count = 0;
+
     // Input files have atomic number, x, y, then z coordinate in each line
     while (getline(inputFile, line))
     {
@@ -58,6 +62,7 @@ void Cluster::add_atom(int atomic_number, double x, double y, double z)
 {
     Atom new_atom(atomic_number, x, y, z);
     atoms.push_back(new_atom);
+    system_matrix = arma::join_rows(system_matrix, new_atom.coords);
 }
 
 int Cluster::get_num_atoms() const { return atoms.size(); }

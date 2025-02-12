@@ -1,14 +1,14 @@
 #include "steepest_descent.hpp"
 #include <armadillo>
 
-void steepest_descent_central_diff(Cluster cluster, double derivative_step_size, double sd_step_size, int iteration)
+void steepest_descent_central_diff(Cluster cluster, double derivative_step_size, double sd_step_size, double convergence_threshold, int iteration)
 {
     if (iteration == 0)
     {
         std::cout << "start steepest descent with golden section line search" << "\n" <<
-        "Initial energy: " << derivative_step_size << "\n" <<
-        "Stepsize for central difference is:" << sd_step_size <<
-        ";Initial stepsize for line search is:" << "" <<
+        "Initial energy: " << cluster.calculate_total_energy() << "\n" <<
+        "Stepsize for central difference is:" << derivative_step_size <<
+        ";Initial stepsize for line search is:" << sd_step_size <<
         ";Threshold for convergence in force is:" << "" << "\n" <<
         "Central Difference Force" << "\n" << std::endl;
         cluster.update_central_difference(derivative_step_size);
@@ -38,10 +38,10 @@ void steepest_descent_central_diff(Cluster cluster, double derivative_step_size,
     
     if (new_energy > original_energy)
     {
-        steepest_descent_central_diff(cluster, derivative_step_size, sd_step_size / 2, iteration + 1);
+        steepest_descent_central_diff(cluster, derivative_step_size, sd_step_size / 2, convergence_threshold, iteration + 1);
     }
     else
     {
-        steepest_descent_central_diff(cluster, derivative_step_size, sd_step_size * 1.0, iteration + 1);
+        steepest_descent_central_diff(cluster, derivative_step_size, sd_step_size * 1.0, convergence_threshold, iteration + 1);
     }
 }
