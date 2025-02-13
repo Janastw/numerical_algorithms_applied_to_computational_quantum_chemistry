@@ -11,8 +11,6 @@ bool Cluster::load_atoms(std::string file)
     std::ifstream inputFile(file);
     if (!inputFile)
     {
-        // TODO: Output error message
-        // Incorrect or corrupt file
         throw std::exception();
     }
     std::string line;
@@ -398,7 +396,7 @@ std::tuple<double, double, double> Cluster::bracketing(double b, double step_siz
 
 void Cluster::bracket(double a, double b, std::function<double(double)> operation, double& ax, double& bx, double& cx)
 {
-    const double GOLD = 1.618034;  // Golden ratio constant
+    const double GOLD = 1.618034; 
     const double GLIMIT = 100.0;
     const double TINY = 1.0E-20;
 
@@ -407,18 +405,16 @@ void Cluster::bracket(double a, double b, std::function<double(double)> operatio
     double fa = operation(ax);
     double fb = operation(bx);
 
-    // Ensure ordering such that f(a) > f(b)
     if (fb > fa)
     {
         std::swap(ax, bx);
         std::swap(fa, fb);
     }
 
-    // First guess for c
     cx = bx + GOLD * (bx - ax);
     double fc = operation(cx);
 
-    while (fb > fc)  // Keep expanding the bracket
+    while (fb > fc)
     {
         double r = (bx - ax) * (fb - fc);
         double q = (bx - cx) * (fb - fa);
@@ -427,7 +423,7 @@ void Cluster::bracket(double a, double b, std::function<double(double)> operatio
         double ulim = bx + GLIMIT * (cx - bx);
         double fu;
 
-        if ((bx - u) * (u - cx) > 0.0)  // Parabolic fit is between b and c
+        if ((bx - u) * (u - cx) > 0.0)
         {
             fu = operation(u);
             if (fu < fc)
@@ -447,18 +443,17 @@ void Cluster::bracket(double a, double b, std::function<double(double)> operatio
             u = cx + GOLD * (cx - bx);
             fu = operation(u);
         }
-        else if ((u - ulim) * (ulim - cx) >= 0.0)  // Limit parabolic fit to max bracket size
+        else if ((u - ulim) * (ulim - cx) >= 0.0)
         {
             u = ulim;
             fu = operation(u);
         }
-        else  // Default golden ratio step
+        else 
         {
             u = cx + GOLD * (cx - bx);
             fu = operation(u);
         }
 
-        // Shift the bracket
         ax = bx;
         bx = cx;
         cx = u;
