@@ -78,6 +78,42 @@ void Cluster::print_system_coordinate_forces()
     std::cout << std::fixed << std::setprecision(10) << system_coordinate_forces << std::endl;
 }
 
+void Cluster::print_analytical_force()
+{
+    if (atoms.empty())
+    {
+        std::cout << "No atoms present in the system" << std::endl;
+        return;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        for (auto& atom: atoms)
+        {
+            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+}
+
+void Cluster::print_forward_difference()
+{
+    if (atoms.empty())
+    {
+        std::cout << "No atoms present in the system" << std::endl;
+        return;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        for (auto& atom: atoms)
+        {
+            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 double Cluster::calculate_total_energy(const arma::mat& coords)
 {
     // Sum of pair-wise energies using sigma_ij/radius_ij
@@ -427,41 +463,5 @@ void Cluster::bracket(double a, double b, std::function<double(double)> operatio
         fa = fb;
         fb = fc;
         fc = fu;
-    }
-}
-
-void Cluster::print_analytical_force()
-{
-    if (atoms.empty())
-    {
-        std::cout << "No atoms present in the system" << std::endl;
-        return;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        for (auto& atom: atoms)
-        {
-            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
-        }
-        std::cout << std::endl;
-    }
-
-
-}
-
-void Cluster::print_forward_difference()
-{
-    if (atoms.empty())
-    {
-        std::cout << "No atoms present in the system" << std::endl;
-        return;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        for (auto& atom: atoms)
-        {
-            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
-        }
-        std::cout << std::endl;
     }
 }

@@ -20,8 +20,6 @@ class Cluster
         // TODO Change to allow file to be read through command line
         // TODO Allow for an entire folder to be run too
         bool load_atoms(std::string file);
-        // Cluster(Cluster new_cluster, double step_size);
-        // TODO: Find out if I have to template this or if I can just take in an integer, float, double etc.
         void add_atom(int atomic_number, double x, double y, double z);
         int get_num_atoms() const;
         std::vector<Atom> get_atoms() const;
