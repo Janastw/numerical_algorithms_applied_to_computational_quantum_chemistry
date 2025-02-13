@@ -48,7 +48,6 @@ bool Cluster::load_atoms(std::string file)
     return true;
 }
 
-// TODO: Find out if I have to template this or if I can just take in an integer, float, double etc.
 void Cluster::add_atom(int atomic_number, double x, double y, double z)
 {
     Atom new_atom(atomic_number, x, y, z);
@@ -79,7 +78,7 @@ void Cluster::print_system_coordinate_forces()
     std::cout << std::fixed << std::setprecision(10) << system_coordinate_forces << std::endl;
 }
 
-double Cluster::calculate_total_energy()
+double Cluster::calculate_total_energy(const arma::mat& coords)
 {
     // Sum of pair-wise energies using sigma_ij/radius_ij
     int num_atoms = atoms.size();
@@ -238,7 +237,6 @@ double Golden::minimize(T &func) {
     return xmin;
 }
 
-
 arma::vec Cluster::gradient(int atom1_index, int atom2_index, double step_size)
 {
     double sigma_ij = calculate_sigma_ij(atoms[atom1_index].get_sigma(), atoms[atom2_index].get_sigma());
@@ -261,7 +259,7 @@ arma::vec Cluster::gradient(int atom1_index, int atom2_index, double step_size)
 void Cluster::steepest_descent(double step_size, double sd_step_size, double threshold)
 {
     arma::mat new_coords = system_coordinates;
-    double old_energy = calculate_total_energy();
+    double old_energy = calculate_total_energy(system_coordinates);
     for (int i = 0; i < system_coordinates.n_cols; i++)
     {
         arma::vec total_gradient = arma::zeros<arma::vec>(system_coordinates.n_rows);
@@ -295,7 +293,7 @@ void Cluster::steepest_descent(double step_size, double sd_step_size, double thr
     system_coordinates = new_coords;
     update_central_difference(step_size);
 
-    double new_energy = calculate_total_energy();
+    double new_energy = calculate_total_energy(system_coordinates);
 
     if (std::abs(new_energy - old_energy) < threshold)
     {
@@ -319,7 +317,7 @@ double Cluster::calculate_total_energy_at(double x)
         temp_coordinates.col(i) -= x * total_gradient;
     }
 
-    return calculate_total_energy();
+    return calculate_total_energy(temp_coordinates);
 }
 
 std::tuple<double, double, double> Cluster::bracketing(double b, double step_size)

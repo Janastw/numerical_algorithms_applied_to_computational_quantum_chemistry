@@ -29,7 +29,7 @@ class Cluster
         void print_atoms();
         void print_system_coordinates();
         void print_system_coordinate_forces();
-        double calculate_total_energy();
+        double calculate_total_energy(const arma::mat& coords);
         void zero_forces();
         void update_analytical_force();
         void step_size(double step_size);

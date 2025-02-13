@@ -110,7 +110,7 @@ int main(void)
 
     Cluster gold_SD;
     gold_SD.load_atoms("./sample_input/standard_SD/1.txt");
-    double energy_standard_SD = gold_SD.calculate_total_energy();
+    double energy_standard_SD = gold_SD.calculate_total_energy(gold_SD.system_coordinates);
     double deriv_approx_step_size = 0.0001;
     double sd_step_size = 0.3;
     double threshold_convergence = 0.01;
@@ -133,7 +133,7 @@ int main(void)
     gold_SD.print_system_coordinate_forces();
 
     gold_SD.steepest_descent(deriv_approx_step_size, sd_step_size, threshold_convergence);
-    std::cout << "Final energy:" << gold_SD.calculate_total_energy() << std::endl;
+    std::cout << "Final energy:" << gold_SD.calculate_total_energy(gold_SD.system_coordinates) << std::endl;
     std::cout << gold_SD.system_coordinates << std::endl;
 
 
