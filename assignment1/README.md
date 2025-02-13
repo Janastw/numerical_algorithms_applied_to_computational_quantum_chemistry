@@ -1,7 +1,7 @@
 # README
 
 ### Instructions for running the script
-1. Clone the repository
+1. Clone the repository - Please join through this link! It should work! https://github.com/Janastw/numerical_algorithms_applied_to_computational_quantum_chemistry.git
 2. Run `make` in the command line while in the `assignment1` folder
    - This will run the makefile which runs everything we need
    - I have already included the output files in the project_outputs folder in case there are any issues with running.
