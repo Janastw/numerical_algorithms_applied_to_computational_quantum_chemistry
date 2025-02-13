@@ -8,9 +8,9 @@
      - Feel free to remove the files from the outputs folder to get newly generated files
     
 ### File Breakdown
-root/
-│── include/                            Header files \
-│   ├── atom.hpp
+root/  
+│── include/                            Header files  
+│   ├── atom.hpp  
 │   ├── cluster.hpp
 │   ├── derivative_approximation.hpp
 │   ├── lennard_jones.hpp
