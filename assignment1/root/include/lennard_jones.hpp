@@ -9,7 +9,6 @@
 
 double calculate_sigma_ij(double sigma_i, double sigma_j);
 
-// Binding Energy between i and j
 double calculate_epsilon_ij(double binding_energy_i, double binding_energy_j);
 
 double calculate_distance(const arma::vec atom_1_coords, const arma::vec atom_2_coords);

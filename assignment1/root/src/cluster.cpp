@@ -6,7 +6,6 @@
 
 
 
-
 bool Cluster::load_atoms(std::string file)
 {
     std::ifstream inputFile(file);
@@ -48,7 +47,6 @@ bool Cluster::load_atoms(std::string file)
     return true;
 }
 
-// TODO: Find out if I have to template this or if I can just take in an integer, float, double etc.
 void Cluster::add_atom(int atomic_number, double x, double y, double z)
 {
     Atom new_atom(atomic_number, x, y, z);
@@ -59,7 +57,9 @@ void Cluster::add_atom(int atomic_number, double x, double y, double z)
 int Cluster::get_num_atoms() const { return atoms.size(); }
 
 std::vector<Atom> Cluster::get_atoms() const { return atoms; }
+
 std::vector<Atom>& Cluster::get_atoms() { return atoms; }
+
 
 void Cluster::print_atoms()
 {
@@ -78,6 +78,43 @@ void Cluster::print_system_coordinate_forces()
 {
     std::cout << std::fixed << std::setprecision(10) << system_coordinate_forces << std::endl;
 }
+
+void Cluster::print_analytical_force()
+{
+    if (atoms.empty())
+    {
+        std::cout << "No atoms present in the system" << std::endl;
+        return;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        for (auto& atom: atoms)
+        {
+            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+}
+
+void Cluster::print_forward_difference()
+{
+    if (atoms.empty())
+    {
+        std::cout << "No atoms present in the system" << std::endl;
+        return;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        for (auto& atom: atoms)
+        {
+            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 
 double Cluster::calculate_total_energy()
 {
@@ -237,7 +274,6 @@ double Golden::minimize(T &func) {
 
     return xmin;
 }
-
 
 arma::vec Cluster::gradient(int atom1_index, int atom2_index, double step_size)
 {
@@ -432,38 +468,3 @@ void Cluster::bracket(double a, double b, std::function<double(double)> operatio
     }
 }
 
-void Cluster::print_analytical_force()
-{
-    if (atoms.empty())
-    {
-        std::cout << "No atoms present in the system" << std::endl;
-        return;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        for (auto& atom: atoms)
-        {
-            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
-        }
-        std::cout << std::endl;
-    }
-
-
-}
-
-void Cluster::print_forward_difference()
-{
-    if (atoms.empty())
-    {
-        std::cout << "No atoms present in the system" << std::endl;
-        return;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        for (auto& atom: atoms)
-        {
-            std::cout << std::setw(8) << std::setprecision(4) << atom.coords_analytical_forces[i] << " ";
-        }
-        std::cout << std::endl;
-    }
-}

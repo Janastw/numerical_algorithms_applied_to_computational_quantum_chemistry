@@ -1,0 +1,25 @@
+Start steepest descent with golden section line search
+Initial energy: -3.2367874204
+Stepsize for central difference is: 0.0001000000
+Initial stepsize for line search is: 0.3000000000
+Threshold for convergence in force is: 0.0100000000
+Analytical Force
+  -0.0130  -1.1076  -0.0130   1.7493  -0.6156
+   0.4657        0  -0.4657        0        0
+   0.1153   0.4808   0.1153   0.8762  -1.5877
+
+Forward Difference Force
+  -0.0130  -1.1076  -0.0130   1.7492  -0.6156
+   0.4657        0  -0.4657        0        0
+   0.1153   0.4807   0.1153   0.8761  -1.5875
+
+Central Difference Force
+  -0.0130  -1.1076  -0.0130   1.7493  -0.6156
+   0.4657        0  -0.4657        0        0
+   0.1153   0.4808   0.1153   0.8762  -1.5877
+
+Final energy: -1.8619349725
+   0.0030   4.2565   0.0030  -4.0050   0.1425
+  -5.1078        0   5.1078        0        0
+  -0.0267  -0.1113  -0.0267  -0.2029   2.3676
+

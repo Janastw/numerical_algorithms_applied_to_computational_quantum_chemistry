@@ -6,8 +6,7 @@
 #include <armadillo>
 
 
-// TODO: Raise an error if the atomic number is not 79 (Gold/Au) - use std::exception
-// Echo the input
+
 class Atom
 {
     private:
@@ -17,12 +16,10 @@ class Atom
         double epsilon; // kcal mol^-1
     
     public:
-        // TODO Use eigen or armadillo for coordinates, but we will worry about that later
         double x, y, z;
         arma::vec coords;
         arma::vec coords_analytical_forces = {0.0, 0.0, 0.0};
 
-        // af = analytical force
         double x_af = 0.0, y_af = 0.0, z_af = 0.0;
 
         Atom(int atomic_number_, double x_, double y_, double z_);

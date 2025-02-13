@@ -3,7 +3,7 @@
 Atom::Atom(int atomic_number_, double x_, double y_, double z_) :
     atomic_number(atomic_number_), x(x_), y(y_), z(z_)
     {
-        if (atomic_number_ != 79) // Error handles non-gold. TODO handle < 1 cases
+        if (atomic_number_ != 79)
         {
             throw std::exception();
         }

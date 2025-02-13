@@ -8,7 +8,6 @@ double calculate_sigma_ij(double sigma_i, double sigma_j)
     return std::sqrt(sigma_i * sigma_j);
 }
 
-// Binding Energy between i and j
 double calculate_epsilon_ij(double binding_energy_i, double binding_energy_j)
 {
     return std::sqrt(binding_energy_i * binding_energy_j);
