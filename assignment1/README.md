@@ -9,12 +9,12 @@
     
 ### File Breakdown
 root/
-│── include/                            Header files
+│── include/                            Header files \
 │   ├── atom.hpp
 │   ├── cluster.hpp
 │   ├── derivative_approximation.hpp
 │   ├── lennard_jones.hpp
-│── src/
+│── src/ \
 │   ├── atom.cpp                        Atom class
 │   ├── cluster.cpp                     System of Atoms - includes steepest descent methods
 │   ├── derivative_approximation.cpp    Forward and Central Difference
