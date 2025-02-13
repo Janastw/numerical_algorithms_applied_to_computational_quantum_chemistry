@@ -8,5 +8,4 @@
 
 void steepest_descent_central_diff(Cluster cluster, double derivative_step_size, double sd_step_size, double convergence_threshold, int iteration);
 
-
 #endif

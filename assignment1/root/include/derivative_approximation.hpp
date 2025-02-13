@@ -5,4 +5,5 @@ double forward_difference(double f_x, double f_x_plus_step_size, double step_siz
 
 double central_difference(double f_x_plus_step_size, double f_x_minus_step_size, double step_size);
 
+
 #endif
