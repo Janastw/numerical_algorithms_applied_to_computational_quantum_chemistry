@@ -9,18 +9,18 @@
     
 ### File Breakdown
 root/  
-│── include/                            Header files  
+│── include/                            > Header files  
 │   ├── atom.hpp  
 │   ├── cluster.hpp  
 │   ├── derivative_approximation.hpp  
 │   ├── lennard_jones.hpp  
 │── src/  
-│   ├── atom.cpp                        Atom class  
-│   ├── cluster.cpp                     System of Atoms - includes steepest descent methods  
-│   ├── derivative_approximation.cpp    Forward and Central Difference  
-│   ├── lennard_jones.cpp               Lennard Jones Calculations  
-│   ├── main.cpp                        Main  
-│   │── plot_generation.ipynb           Generates plot  
+│   ├── atom.cpp                        > Atom class  
+│   ├── cluster.cpp                     > System of Atoms - includes steepest descent methods  
+│   ├── derivative_approximation.cpp    > Forward and Central Difference  
+│   ├── lennard_jones.cpp               > Lennard Jones Calculations  
+│   ├── main.cpp                        > Main  
+│   │── plot_generation.ipynb           > Generates plot  
 
 ### Important things to know
 1. Output files are generated. In case this does not work with your system, I left commented out code for each portion of the questions to print to the terminal.
