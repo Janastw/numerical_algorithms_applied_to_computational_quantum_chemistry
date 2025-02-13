@@ -9,8 +9,8 @@
     
 ### File Breakdown
 root/  
-│── include/ - These are the header files 
-│   ├── atom.hpp  
+│── include/ - These are the header files   
+│   ├── atom.hpp    
 │   ├── cluster.hpp  
 │   ├── derivative_approximation.hpp  
 │   ├── lennard_jones.hpp  
